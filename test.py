@@ -5,6 +5,7 @@ from mininet.link import TCLink
 from CustomTopo import *
 from mininet.cli import CLI
 
+setLogLevel('info')
 linkopts1 = {'bw':50, 'delay':'5ms'}
 linkopts2 = {'bw':30, 'delay':'10ms'}
 
