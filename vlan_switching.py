@@ -40,18 +40,13 @@ class SimpleSwitch(app_manager.RyuApp):
         ################ ADDED CODES #################
         # add a VLAN map table, dict(vlanid:[port,dpid])
         self.vlan_map = {}
-        # Hard-coded this 
-        self.vlan_map = {'10':(1,1),'10':(2,1),'30':(3,1),'40':(4,1),'30':(1,2),'30':(2,2),'10':(3,2),'40':(4,40)}
-        for vlan in vlan_map:
-            mac_to_port[vlan] = {}
-
-    def getVlan(self,port,dpid):
+        # Hard-coded this dict={(dpid,port):vlan_id}
+        self.vlan_map = {(1,1):10,(1,2):10,(1,3):30,(1,4):40,(3,1):30,(3,2):30,(3,3):10,(3,4):40}
+     
+    def getVlan(self,dpid,port):
     	# Get the VLAN associated with the given port and dpid
-    	vlanList =list()
-    	for (key,value) in self.vlan_map.items():
-    		if value == (port,dpid):
-    			vlanList.append(key)
-    	return vlanList
+    
+    	return vlan_map[(dpid,port)] if (dpid,port) in vlan_map else 1
 
     def getPorts(self,vlan,dpid):
     	# Get all the ports that belong to the VLAN in the switch
@@ -84,7 +79,9 @@ class SimpleSwitch(app_manager.RyuApp):
         src = eth.src
 
         dpid = datapath.id
-        self.mac_to_port.setdefault(vlan_id, {})
+	vlan_id=getVlan(dpid,msg.in_port)
+        print vlan_id
+        self.mac_to_port.setdefault(dpid, {})
 
         self.logger.info("packet in %s %s %s %s", dpid, src, dst, msg.in_port)
 
