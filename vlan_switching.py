@@ -37,6 +37,14 @@ class SimpleSwitch(app_manager.RyuApp):
     def __init__(self, *args, **kwargs):
         super(SimpleSwitch, self).__init__(*args, **kwargs)
         self.mac_to_port = {}
+        ################ ADDED CODES #################
+        # add a VLAN map table, dict(vlanid:[port,dpid])
+        self.vlan_map = {}
+        # Hard-coded this 
+        self.vlan_map = {'10':(1,1),'10':(2,1),'30':(3,1),'40':(4,1),'30':(1,2),'30':(2,2),'10':(3,2),'40':(4,40)}
+        for vlan in vlan_map:
+            mac_to_port[vlan] = {}
+        ##############################################
 
     def add_flow(self, datapath, in_port, dst, actions):
         ofproto = datapath.ofproto
