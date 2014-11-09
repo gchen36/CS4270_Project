@@ -44,6 +44,18 @@ class SimpleSwitch(app_manager.RyuApp):
         self.vlan_map = {'10':(1,1),'10':(2,1),'30':(3,1),'40':(4,1),'30':(1,2),'30':(2,2),'10':(3,2),'40':(4,40)}
         for vlan in vlan_map:
             mac_to_port[vlan] = {}
+
+    def getVlan(self,port,dpid):
+    	# Get the VLAN associated with the given port and dpid
+    	vlanList =list()
+    	for (key,value) in self.vlan_map.items():
+    		if value == (port,dpid):
+    			vlanList.append(key)
+    	return vlanList
+
+    def getPorts(self,vlan,dpid):
+    	# Get all the ports that belong to the VLAN in the switch
+    	pass
         ##############################################
 
     def add_flow(self, datapath, in_port, dst, actions):
