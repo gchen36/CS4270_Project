@@ -41,12 +41,12 @@ class SimpleSwitch(app_manager.RyuApp):
         # add a VLAN map table, dict(vlanid:[port,dpid])
         self.vlan_map = {}
         # Hard-coded this dict={(dpid,port):vlan_id}
-        self.vlan_map = {(1,1):10,(1,2):10,(1,3):30,(1,4):40,(3,1):30,(3,2):30,(3,3):10,(3,4):40}
+        self.vlan_map = {(2,2):10,(2,3):10,(2,4):30,(2,5):40,(3,2):30,(3,3):30,(3,4):10,(3,5):40}
      
     def getVlan(self,dpid,port):
     	# Get the VLAN associated with the given port and dpid
     
-    	return vlan_map[(dpid,port)] if (dpid,port) in vlan_map else 1
+    	return self.vlan_map[(dpid,port)] if (dpid,port) in self.vlan_map else 1
 
     def getPorts(self,vlan,dpid):
     	# Get all the ports that belong to the VLAN in the switch
@@ -79,7 +79,7 @@ class SimpleSwitch(app_manager.RyuApp):
         src = eth.src
 
         dpid = datapath.id
-	vlan_id=getVlan(dpid,msg.in_port)
+	vlan_id=self.getVlan(dpid,msg.in_port)
         print vlan_id
         self.mac_to_port.setdefault(dpid, {})
 
